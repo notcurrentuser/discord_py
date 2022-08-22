@@ -1,16 +1,12 @@
-# python discord_reg_api.py --email="example@gmail.com" --login="example"
-
-
 import json
 import os
 import random
 import string
 import requests
-import argparse
 
 from twocaptcha import TwoCaptcha
 
-API_2CAPTCHA = 'example'
+API_2CAPTCHA = 'xxx'
 
 
 def file_save(email, login, password, token):
@@ -28,6 +24,7 @@ def password_generation(password_len: int) -> str:
     ascii = string.ascii_letters + string.digits
     for _ in range(password_len):
         password.append(random.choice(ascii))
+	
     return password
 
 
@@ -50,15 +47,9 @@ def captcha_solv() -> str:
         return result
 
 
-parser = argparse.ArgumentParser(
-    description='Discord registration using api v9')
-parser.add_argument('--email', type=str)
-parser.add_argument('--login', type=str, help='login/name')
-args = parser.parse_args()
-
-EMAIL_USER_INPUT = str(args.email)
-LOGIN_USER_INPUT = str(args.login)
-PASSWORD_GENERATED = password_generation(32)
+EMAIL_USER_INPUT = str(input('Введіть свій EMAIL: '))
+LOGIN_USER_INPUT = str(input('Введіть свій логін: ')) 
+PASSWORD_GENERATED = ''.join(password_generation(32))
 
 
 def api_reg():
@@ -75,14 +66,14 @@ def api_reg():
         "promotional_email_opt_in": "false"
     }
 
-    data = json.loads(json.dumps(data))
+    data = json.dumps(data)
 
     headers = {
         'Content-Type': 'application/json'
     }
 
     r = requests.post('https://discord.com/api/v9/auth/register',
-                      data=data, headers=headers)
+                      json=data, headers=headers)
     return r
 
 
