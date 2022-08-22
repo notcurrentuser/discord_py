@@ -74,7 +74,12 @@ def api_reg():
 
     r = requests.post('https://discord.com/api/v9/auth/register',
                       json=data, headers=headers)
-    return r
+    if r.status_code == 200:
+        return r
+    else:
+        print(r, r.text)
+        exit()
+
 
 
 if __name__ == '__main__':
